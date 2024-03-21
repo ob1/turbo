@@ -359,7 +359,7 @@ pub struct EsmExports {
 #[turbo_tasks::value(shared)]
 #[derive(Hash, Debug)]
 pub struct ExpandedExports {
-    pub exports: BTreeMap<String, EsmExport>,
+    pub exports: BTreeMap<Arc<String>, EsmExport>,
     /// Modules we couldn't analyse all exports of.
     pub dynamic_exports: Vec<Vc<Box<dyn EcmascriptChunkPlaceable>>>,
 }
@@ -368,7 +368,7 @@ pub struct ExpandedExports {
 impl EsmExports {
     #[turbo_tasks::function]
     pub async fn expand_exports(&self) -> Result<Vc<ExpandedExports>> {
-        let mut exports: BTreeMap<String, EsmExport> = self.exports.clone();
+        let mut exports: BTreeMap<Arc<String>, EsmExport> = self.exports.clone();
         let mut dynamic_exports = vec![];
 
         for esm_ref in self.star_exports.iter() {
@@ -471,7 +471,7 @@ impl CodeGenerateable for EsmExports {
                 props.push(PropOrSpread::Prop(Box::new(Prop::KeyValue(KeyValueProp {
                     key: PropName::Str(Str {
                         span: DUMMY_SP,
-                        value: exported.clone().into(),
+                        value: (***exported).into(),
                         raw: None,
                     }),
                     value: Box::new(expr),
