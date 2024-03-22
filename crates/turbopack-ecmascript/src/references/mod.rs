@@ -2369,10 +2369,7 @@ async fn require_context_visitor(
         }
     };
 
-    let dir = origin
-        .origin_path()
-        .parent()
-        .join(options.dir.clone().into());
+    let dir = origin.origin_path().parent().join(options.dir.clone());
 
     let map = RequireContextMap::generate(
         origin,
