@@ -10859,6 +10859,7 @@ dependencies = [
  "turbopack-static",
  "turbopack-swc-utils",
  "turbopack-test-utils",
+ "turbopack-trace-server",
  "turbopack-trace-utils",
 ]
 
@@ -10920,6 +10921,7 @@ dependencies = [
  "turbopack-node",
  "turbopack-nodejs",
  "turbopack-resolve",
+ "turbopack-trace-server",
  "turbopack-trace-utils",
  "webbrowser",
 ]
@@ -11389,6 +11391,10 @@ name = "turbopath"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "biome_deserialize",
+ "biome_deserialize_macros",
+ "biome_diagnostics",
+ "biome_json_parser",
  "camino",
  "dunce",
  "fs-err",
@@ -11399,6 +11405,7 @@ dependencies = [
  "tempdir",
  "test-case",
  "thiserror",
+ "turborepo-unescape",
  "wax",
 ]
 
@@ -11534,10 +11541,12 @@ name = "turborepo-errors"
 version = "0.1.0"
 dependencies = [
  "biome_deserialize",
+ "biome_diagnostics",
  "miette 5.10.0",
  "serde",
  "serde_json",
  "test-case",
+ "thiserror",
 ]
 
 [[package]]
@@ -11696,6 +11705,7 @@ dependencies = [
  "turborepo-scm",
  "turborepo-telemetry",
  "turborepo-ui",
+ "turborepo-unescape",
  "turborepo-vercel-api",
  "turborepo-vercel-api-mock",
  "twox-hash",
@@ -11764,9 +11774,14 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "async-once-cell",
+ "biome_deserialize",
+ "biome_deserialize_macros",
+ "biome_diagnostics",
+ "biome_json_parser",
  "globwalk",
  "itertools 0.10.5",
  "lazy-regex",
+ "miette 5.10.0",
  "node-semver",
  "petgraph",
  "pretty_assertions",
@@ -11782,6 +11797,7 @@ dependencies = [
  "tokio-stream",
  "tracing",
  "turbopath",
+ "turborepo-errors",
  "turborepo-graph-utils",
  "turborepo-lockfiles",
  "wax",
@@ -11859,6 +11875,16 @@ dependencies = [
  "turbopath",
  "turborepo-vt100",
  "winapi 0.3.9",
+]
+
+[[package]]
+name = "turborepo-unescape"
+version = "0.1.0"
+dependencies = [
+ "biome_deserialize",
+ "biome_diagnostics",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

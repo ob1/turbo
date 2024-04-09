@@ -77,8 +77,8 @@ petgraph = { workspace = true }
 pidlock = { path = "../turborepo-pidlock" }
 portable-pty = "0.8.1"
 pprof = { version = "0.12.1", features = [
-  "prost-codec",
-  "frame-pointer",
+    "prost-codec",
+    "frame-pointer",
 ], optional = true }
 prost = "0.12.3"
 radix_trie = { workspace = true }
@@ -127,6 +127,7 @@ turborepo-scm = { workspace = true }
 turborepo-telemetry = { path = "../turborepo-telemetry" }
 turborepo-ui = { workspace = true }
 turborepo-vercel-api = { path = "../turborepo-vercel-api" }
+turborepo-unescape = { workspace = true }
 twox-hash = "1.6.3"
 uds_windows = "1.0.2"
 wax = { workspace = true }
