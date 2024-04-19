@@ -212,8 +212,10 @@ impl ChunkItem for CachedExternalModuleChunkItem {
     }
 
     #[turbo_tasks::function]
-    fn is_self_async(&self) -> Vc<bool> {
-        Vc::cell(true)
+    async fn is_self_async(&self) -> Result<Vc<bool>> {
+        Ok(Vc::cell(
+            self.module.await?.external_type == CachedExternalType::EcmaScriptViaImport,
+        ))
     }
 }
 
