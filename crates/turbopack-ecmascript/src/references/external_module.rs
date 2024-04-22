@@ -64,28 +64,18 @@ impl CachedExternalModule {
     pub fn content(&self) -> Result<Vc<EcmascriptModuleContent>> {
         let mut code = RopeBuilder::default();
 
-        match self.external_type {
-            CachedExternalType::CommonJs => {
-                writeln!(
-                    code,
-                    "const mod = __turbopack_external_require__({});",
-                    StringifyJs(&self.request)
-                )?;
-            }
-            CachedExternalType::EcmaScriptViaRequire => {
-                writeln!(
-                    code,
-                    "const mod = __turbopack_external_require__({}, true);",
-                    StringifyJs(&self.request)
-                )?;
-            }
-            CachedExternalType::EcmaScriptViaImport => {
-                writeln!(
-                    code,
-                    "const mod = await __turbopack_external_import__({});",
-                    StringifyJs(&self.request)
-                )?;
-            }
+        if self.external_type == CachedExternalType::EcmaScriptViaImport {
+            writeln!(
+                code,
+                "const mod = await __turbopack_external_import__({});",
+                StringifyJs(&self.request)
+            )?;
+        } else {
+            writeln!(
+                code,
+                "const mod = __turbopack_external_require__({});",
+                StringifyJs(&self.request)
+            )?;
         }
 
         writeln!(code)?;
