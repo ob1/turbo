@@ -42,6 +42,7 @@ pub async fn run(base: CommandBase, telemetry: CommandEventBuilder) -> Result<i3
             .with_analytics_sender(analytics_sender)
             .build(&handler, telemetry)
             .await?;
+
         let result = run.run().await;
 
         if let Some(analytics_handle) = analytics_handle {
