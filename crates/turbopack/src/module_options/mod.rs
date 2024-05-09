@@ -83,8 +83,6 @@ impl ModuleOptions {
             use_swc_css,
             ..
         } = *module_options_context.await?;
-        let tree_shaking_mode = Some(turbopack_ecmascript::TreeShakingMode::ModuleFragments);
-
         if !rules.is_empty() {
             let path_value = path.await?;
 
