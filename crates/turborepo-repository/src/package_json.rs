@@ -5,49 +5,51 @@ use biome_deserialize::json::deserialize_from_json_str;
 use biome_deserialize_macros::Deserializable;
 use biome_diagnostics::DiagnosticExt;
 use biome_json_parser::JsonParserOptions;
+use biome_json_syntax::AnyJsonValue;
 use miette::Diagnostic;
 use serde::{Deserialize, Serialize};
 use turbopath::{AbsoluteSystemPath, RelativeUnixPathBuf};
 use turborepo_errors::ParseDiagnostic;
+use turborepo_unescape::UnescapedString;
 
 #[derive(Debug, Clone, Serialize, Default, PartialEq, Eq, Deserializable)]
 #[serde(rename_all = "camelCase")]
 pub struct PackageJson {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<UnescapedString>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub version: Option<String>,
+    pub version: Option<UnescapedString>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub package_manager: Option<String>,
+    pub package_manager: Option<UnescapedString>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub dependencies: Option<BTreeMap<String, String>>,
+    pub dependencies: Option<BTreeMap<UnescapedString, UnescapedString>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub dev_dependencies: Option<BTreeMap<String, String>>,
+    pub dev_dependencies: Option<BTreeMap<UnescapedString, UnescapedString>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub optional_dependencies: Option<BTreeMap<String, String>>,
+    pub optional_dependencies: Option<BTreeMap<UnescapedString, UnescapedString>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub peer_dependencies: Option<BTreeMap<String, String>>,
+    pub peer_dependencies: Option<BTreeMap<UnescapedString, UnescapedString>>,
     #[serde(rename = "turbo", default, skip_serializing_if = "Option::is_none")]
-    pub legacy_turbo_config: Option<String>,
+    pub legacy_turbo_config: Option<UnescapedString>,
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
-    pub scripts: BTreeMap<String, String>,
+    pub scripts: BTreeMap<UnescapedString, UnescapedString>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resolutions: Option<BTreeMap<String, String>>,
+    pub resolutions: Option<BTreeMap<UnescapedString, UnescapedString>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pnpm: Option<PnpmConfig>,
     // Unstructured fields kept for round trip capabilities
-    //#[serde(flatten)]
-    //pub other: BTreeMap<String, Value>,
+    #[deserializable(rest)]
+    pub other: BTreeMap<String, serde_json::Value>,
 }
 
-#[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq, Eq, Deserializable)]
+#[derive(Debug, Default, Clone, Serialize, PartialEq, Eq, Deserializable)]
 #[serde(rename_all = "camelCase")]
 pub struct PnpmConfig {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patched_dependencies: Option<BTreeMap<String, RelativeUnixPathBuf>>,
     // Unstructured config options kept for round trip capabilities
-    //#[serde(flatten)]
-    //pub other: BTreeMap<String, Value>,
+    #[deserializable(rest)]
+    pub other: BTreeMap<String, serde_json::Value>,
 }
 
 #[derive(Debug, thiserror::Error, Diagnostic)]
@@ -94,12 +96,13 @@ impl PackageJson {
         Ok(package_json)
     }
 
-    pub fn all_dependencies(&self) -> impl Iterator<Item = (&String, &String)> + '_ {
+    pub fn all_dependencies(&self) -> impl Iterator<Item = (&str, &str)> + '_ {
         self.dev_dependencies
             .iter()
             .flatten()
             .chain(self.optional_dependencies.iter().flatten())
             .chain(self.dependencies.iter().flatten())
+            .map(|(s1, s2)| (s1.as_ref(), s2.as_ref()))
     }
 
     /// Returns the command for script_name if it is non-empty
@@ -107,7 +110,7 @@ impl PackageJson {
         self.scripts
             .get(script_name)
             .filter(|command| !command.is_empty())
-            .map(|command| command.as_str())
+            .map(|command| command.as_ref())
     }
 }
 

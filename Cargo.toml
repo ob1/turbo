@@ -211,7 +211,7 @@ biome_console = "0.5.7"
 biome_deserialize = "0.5.7"
 biome_diagnostics = "0.5.7"
 biome_json_parser = "0.5.7"
-biome_json_syntax = "0.5.7"
+biome_json_syntax = { path = "../biome/crates/biome_json_syntax", features = ["serde"] }
 bytes = "1.1.0"
 camino = { version = "1.1.4", features = ["serde1"] }
 chrono = "0.4.23"

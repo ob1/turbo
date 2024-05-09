@@ -12,9 +12,10 @@ anyhow = { workspace = true }
 async-once-cell = "0.5.3"
 
 biome_deserialize = { workspace = true }
-biome_deserialize_macros = "0.5.7"
+biome_deserialize_macros = { path = "../../../biome/crates/biome_deserialize_macros" }
 biome_diagnostics = { workspace = true }
 biome_json_parser = { workspace = true }
+biome_json_syntax = { workspace = true }
 
 globwalk = { version = "0.1.0", path = "../turborepo-globwalk" }
 itertools = { workspace = true }
@@ -35,6 +36,7 @@ turbopath = { workspace = true, features = ["biome"] }
 turborepo-errors = { workspace = true }
 turborepo-graph-utils = { path = "../turborepo-graph-utils" }
 turborepo-lockfiles = { workspace = true }
+turborepo-unescape = { workspace = true }
 wax = { workspace = true }
 which = { workspace = true }
 
