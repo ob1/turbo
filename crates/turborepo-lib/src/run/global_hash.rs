@@ -9,12 +9,16 @@ use tracing::debug;
 use turbopath::{AbsoluteSystemPath, AbsoluteSystemPathBuf, RelativeUnixPathBuf};
 use turborepo_env::{get_global_hashable_env_vars, DetailedMap, EnvironmentVariableMap};
 use turborepo_lockfiles::Lockfile;
-use turborepo_repository::package_manager::{self, PackageManager};
+use turborepo_repository::{
+    package_graph::PackageInfo,
+    package_manager::{self, PackageManager},
+};
 use turborepo_scm::SCM;
 
 use crate::{
     cli::EnvMode,
     hash::{GlobalHashable, TurboHash},
+    task_hash::get_external_deps_hash,
 };
 
 static DEFAULT_ENV_VARS: [&str; 1] = ["VERCEL_ANALYTICS_ID"];
@@ -40,7 +44,7 @@ pub struct GlobalHashableInputs<'a> {
     pub global_cache_key: &'static str,
     pub global_file_hash_map: HashMap<RelativeUnixPathBuf, String>,
     // This is `None` in single package mode
-    pub root_external_dependencies_hash: Option<&'a str>,
+    pub root_external_dependencies_hash: Option<String>,
     pub env: &'a [String],
     // Only Option to allow #[derive(Default)]
     pub resolved_env_vars: Option<DetailedMap>,
@@ -52,7 +56,8 @@ pub struct GlobalHashableInputs<'a> {
 
 #[allow(clippy::too_many_arguments)]
 pub fn get_global_hash_inputs<'a, L: ?Sized + Lockfile>(
-    root_external_dependencies_hash: Option<&'a str>,
+    is_monorepo: bool,
+    root_package: &PackageInfo,
     root_path: &AbsoluteSystemPath,
     package_manager: &PackageManager,
     lockfile: Option<&L>,
@@ -64,6 +69,9 @@ pub fn get_global_hash_inputs<'a, L: ?Sized + Lockfile>(
     framework_inference: bool,
     hasher: &SCM,
 ) -> Result<GlobalHashableInputs<'a>, Error> {
+    let root_external_dependencies_hash =
+        is_monorepo.then(|| get_external_deps_hash(&root_package.transitive_dependencies));
+
     let global_hashable_env_vars =
         get_global_hashable_env_vars(env_at_execution_start, global_env)?;
 
@@ -92,7 +100,9 @@ pub fn get_global_hash_inputs<'a, L: ?Sized + Lockfile>(
 
     debug!(
         "external deps hash: {}",
-        root_external_dependencies_hash.unwrap_or("no hash (single package)")
+        root_external_dependencies_hash
+            .as_deref()
+            .unwrap_or("no hash (single package)")
     );
 
     Ok(GlobalHashableInputs {
@@ -165,7 +175,7 @@ impl<'a> GlobalHashableInputs<'a> {
         let global_hashable = GlobalHashable {
             global_cache_key: self.global_cache_key,
             global_file_hash_map: &self.global_file_hash_map,
-            root_external_dependencies_hash: self.root_external_dependencies_hash,
+            root_external_dependencies_hash: self.root_external_dependencies_hash.as_deref(),
             env: self.env,
             resolved_env_vars: self
                 .resolved_env_vars
@@ -186,7 +196,7 @@ mod tests {
     use turbopath::AbsoluteSystemPathBuf;
     use turborepo_env::EnvironmentVariableMap;
     use turborepo_lockfiles::Lockfile;
-    use turborepo_repository::package_manager::PackageManager;
+    use turborepo_repository::{package_graph::PackageInfo, package_manager::PackageManager};
     use turborepo_scm::SCM;
 
     use super::get_global_hash_inputs;
@@ -214,7 +224,8 @@ mod tests {
         #[cfg(not(windows))]
         let file_deps = ["/some/path".to_string()];
         let result = get_global_hash_inputs(
-            None,
+            false,
+            &PackageInfo::default(),
             &root,
             &PackageManager::Pnpm,
             lockfile,

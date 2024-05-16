@@ -30,7 +30,7 @@ pub struct GlobalEnvVarSummary<'a> {
 pub struct GlobalHashSummary<'a> {
     pub root_key: &'static str,
     pub files: BTreeMap<RelativeUnixPathBuf, String>,
-    pub hash_of_external_dependencies: &'a str,
+    pub hash_of_external_dependencies: String,
     pub environment_variables: GlobalEnvVarSummary<'a>,
 }
 

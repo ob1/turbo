@@ -197,9 +197,6 @@ impl Run {
 
         let is_monorepo = !self.opts.run_opts.single_package;
 
-        let root_external_dependencies_hash =
-            is_monorepo.then(|| get_external_deps_hash(&root_workspace.transitive_dependencies));
-
         let global_hash_inputs = {
             let (env_mode, pass_through_env) = match self.opts.run_opts.env_mode {
                 // In infer mode, if there is any pass_through config (even if it is an empty array)
@@ -220,7 +217,8 @@ impl Run {
             };
 
             get_global_hash_inputs(
-                root_external_dependencies_hash.as_deref(),
+                is_monorepo,
+                root_workspace,
                 &self.repo_root,
                 self.pkg_dep_graph.package_manager(),
                 self.pkg_dep_graph.lockfile(),
