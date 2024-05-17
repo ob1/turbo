@@ -41,6 +41,7 @@ struct GlobalHashable {
   passThroughEnv @5 :List(Text);
   envMode @6 :EnvMode;
   frameworkInference @7 :Bool;
+  engines @9 :List(Entry);
 
 
   enum EnvMode {
