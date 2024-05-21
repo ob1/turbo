@@ -15,11 +15,12 @@ Check
     Inferred Global Env Vars Values       = 
     Global Passed Through Env Vars        = 
     Global Passed Through Env Vars Values = 
+    Engines Values                        = 
   
   Tasks to Run
   build
     Task                           = build\s* (re)
-    Hash                           = 10229b8c4ed48f95
+    Hash                           = 5c3c1742edb70bb8
     Cached \(Local\)                 = false\s* (re)
     Cached \(Remote\)                = false\s* (re)
     Command                        = echo building > foo.txt\s* (re)
@@ -50,7 +51,7 @@ Run real once
   $ ${TURBO} run build
   \xe2\x80\xa2 Running build (esc)
   \xe2\x80\xa2 Remote caching disabled (esc)
-  build: cache bypass, force executing 10229b8c4ed48f95
+  build: cache bypass, force executing 5c3c1742edb70bb8
   build: 
   build: > build
   build: > echo building > foo.txt
@@ -64,7 +65,7 @@ Run a second time, verify no caching because there is no config
   $ ${TURBO} run build
   \xe2\x80\xa2 Running build (esc)
   \xe2\x80\xa2 Remote caching disabled (esc)
-  build: cache bypass, force executing 10229b8c4ed48f95
+  build: cache bypass, force executing 5c3c1742edb70bb8
   build: 
   build: > build
   build: > echo building > foo.txt

@@ -25,7 +25,8 @@ Setup
       "configured": [],
       "inferred": [],
       "passthrough": null
-    }
+    },
+    "engines": null
   }
 
   $ cat tmpjson.log | jq 'keys'
@@ -49,7 +50,7 @@ Setup
     "taskId": "my-app#build",
     "task": "build",
     "package": "my-app",
-    "hash": "61394a550211cbe8",
+    "hash": "4dc68e628703cbf4",
     "inputs": {
       ".env.local": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
       "package.json": "1746e0db2361085b5953a6a3beab08c24af5bc08"
@@ -109,7 +110,7 @@ Setup
     "taskId": "util#build",
     "task": "build",
     "package": "util",
-    "hash": "d30fc4474534c30e",
+    "hash": "728076a89c49afbf",
     "inputs": {
       "package.json": "e755064fd7893809d10fc067bb409c7ae516327f"
     },

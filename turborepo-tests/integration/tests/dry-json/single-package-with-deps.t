@@ -23,7 +23,8 @@ Setup
         "configured": [],
         "inferred": [],
         "passthrough": null
-      }
+      },
+      "engines": null
     },
     "envMode": "infer",
     "frameworkInference": true,
@@ -31,7 +32,7 @@ Setup
       {
         "taskId": "build",
         "task": "build",
-        "hash": "fbef1dba65f21ba4",
+        "hash": "6c1cecf7f99d0166",
         "inputs": {
           ".gitignore": "03b541460c1b836f96f9c0a941ceb48e91a9fd83",
           "package-lock.json": "1c117cce37347befafe3a9cba1b8a609b3600021",
@@ -86,7 +87,7 @@ Setup
       {
         "taskId": "test",
         "task": "test",
-        "hash": "75187c3aff97a0a8",
+        "hash": "d241ae86a1a24a2e",
         "inputs": {
           ".gitignore": "03b541460c1b836f96f9c0a941ceb48e91a9fd83",
           "package-lock.json": "1c117cce37347befafe3a9cba1b8a609b3600021",

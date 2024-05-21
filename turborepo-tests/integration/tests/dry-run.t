@@ -24,13 +24,14 @@ Setup
     Inferred Global Env Vars Values       = 
     Global Passed Through Env Vars        = 
     Global Passed Through Env Vars Values = 
+    Engines Values                        = 
 
 # Part 3 are Tasks to Run, and we have to validate each task separately
   $ cat tmp-3.txt | grep "my-app#build" -A 17
   my-app#build
     Task                           = build\s* (re)
     Package                        = my-app\s* (re)
-    Hash                           = 61394a550211cbe8\s* (re)
+    Hash                           = 4dc68e628703cbf4
     Cached \(Local\)                 = false\s* (re)
     Cached \(Remote\)                = false\s* (re)
     Directory                      = apps(\/|\\)my-app\s* (re)
@@ -50,7 +51,7 @@ Setup
   util#build
     Task                           = build\s* (re)
     Package                        = util\s* (re)
-    Hash                           = d30fc4474534c30e\s* (re)
+    Hash                           = 728076a89c49afbf
     Cached \(Local\)                 = false\s* (re)
     Cached \(Remote\)                = false\s* (re)
     Directory                      = packages(\/|\\)util\s* (re)
